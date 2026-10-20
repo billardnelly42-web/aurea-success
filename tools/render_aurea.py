@@ -12,7 +12,7 @@ content.json :
   "note_titre": "(facultatif) Phrase-choc de la note",
   "note_texte": "(facultatif) Développement de la note."
 }
-Produit out_dir/<date>-pensee.png (et out_dir/<date>-note.png si la note est fournie).
+Produit out_dir/<date>-pensee.png et out_dir/<date>-pensee.jpg (et out_dir/<date>-note.png si la note est fournie).
 Reproduit les templates Main.dc.html / Citation1.dc.html du canvas Aurea Success.
 """
 import json
@@ -306,6 +306,10 @@ def main(argv):
     p_path = os.path.join(out_dir, f"{date}-pensee.png")
     p.save(p_path, "PNG", optimize=True)
     print(p_path)
+    # JPEG pour la publication (TikTok refuse le PNG ; Instagram accepte les deux)
+    j_path = os.path.join(out_dir, f"{date}-pensee.jpg")
+    p.convert("RGB").save(j_path, "JPEG", quality=95, optimize=True, subsampling=0)
+    print(j_path)
     # La Note est facultative : rendue seulement si les deux champs sont fournis.
     if content.get("note_titre") and content.get("note_texte"):
         n = render_note(fonts, page, content["note_titre"], content["note_texte"])
